@@ -57,6 +57,7 @@ namespace APP_series.Entities
             obj += $"Descrição: {Descricao}" + Environment.NewLine;
             obj += $"Diretor: {Diretor}" + Environment.NewLine;
             obj += $"Ano: {Ano}" + Environment.NewLine;
+            obj += $"Status: {Status}" + Environment.NewLine;
 
             return obj;
 

@@ -1,6 +1,7 @@
 ﻿using APP_series.Entities;
 using APP_series.Entities.Enum;
 using APP_series.Repository;
+using APP_series.Repository.Implamentation;
 using System;
 using System.Collections.Generic;
 
@@ -8,7 +9,8 @@ namespace APP_series
 {
     class Program
     {
-        static SerieRepository repository = new SerieRepository();
+        static SerieRepository serieRepository = new SerieRepository();
+        static FilmeRepository filmeRepository = new FilmeRepository();
 
         static void Main(string[] args)
         {
@@ -19,29 +21,50 @@ namespace APP_series
                 switch (opcaoUsuario)
                 {
                     case "1":
-                        FindAll();
+                        FindAllSerie();
                         break;
 
                     case "2":
-                        FindById();
+                        FindAllFilme();
                         break;
 
                     case "3":
-                        Create();
+                        FindByIdSerie();
                         break;
 
                     case "4":
-                        Update();
+                        FindByIdFilme();
                         break;
 
                     case "5":
-                        Delete();
+                        CreateSerie();
                         break;
+
+                    case "6":
+                        CreateFilme();
+                        break;
+
+                    case "7":
+                        UpdateSerie();
+                        break;
+
+                    case "8":
+                        UpdateFilme();
+                        break;
+
+                    case "9":
+                       DeleteSerie();
+                        break;
+
+                    case "10":
+                        DeleteFilme();
+                        break;
+
 
                     case "C":
                         Console.Clear();
                         break;
-                        
+
 
                     default:
                         throw new ArgumentException();
@@ -52,12 +75,13 @@ namespace APP_series
 
         }
 
+       
 
-        private static void FindAll()
+        private static void FindAllSerie()
         {
             Console.WriteLine("Listar Séries");
 
-            var list = repository.FindAll();
+            var list = serieRepository.FindAll();
 
             if (list.Count == 0)
             {
@@ -74,19 +98,19 @@ namespace APP_series
             Console.WriteLine();
         }
 
-        private static void FindById()
+        private static void FindByIdSerie()
         {
             Console.WriteLine("Informe o id da série: ");
             int id = int.Parse(Console.ReadLine());
 
             Console.WriteLine();
 
-            var serie = repository.FindById(id);
+            var serie = serieRepository.FindById(id);
 
             Console.WriteLine(serie);
         }
 
-        private static void Create()
+        private static void CreateSerie()
         {
             Console.WriteLine("Adicionar nova série");
 
@@ -108,22 +132,22 @@ namespace APP_series
 
             Console.Write("infome o ano da estréria da série: ");
             int ano = int.Parse(Console.ReadLine());
-           
+
             Console.WriteLine();
 
-            Serie serie = new Serie(id: repository.Next(), titulo, genero: (GeneroOpcoes)input_genero, descricao, ano);
+            Serie serie = new Serie(id: serieRepository.Next(), titulo, genero: (GeneroOpcoes)input_genero, descricao, ano);
 
-            repository.Create(serie);
+            serieRepository.Create(serie);
         }
-              
 
-        private static void Update()
+
+        private static void UpdateSerie()
         {
             Console.WriteLine("Atualizar série");
             Console.WriteLine("Informe o Id da série: ");
             int idSerie = int.Parse(Console.ReadLine());
 
-            foreach(int generos in Enum.GetValues(typeof(GeneroOpcoes)))
+            foreach (int generos in Enum.GetValues(typeof(GeneroOpcoes)))
             {
                 Console.WriteLine($"{generos} - {Enum.GetName(typeof(GeneroOpcoes), generos)}");
             }
@@ -146,12 +170,12 @@ namespace APP_series
 
             Serie serie = new Serie(id: idSerie, titulo, genero: (GeneroOpcoes)input_genero, descricao, ano);
 
-            repository.Update(idSerie, serie);
+            serieRepository.Update(idSerie, serie);
 
 
-        }      
+        }
 
-        private static void Delete()
+        private static void DeleteSerie()
         {
             Console.WriteLine("Deletar série");
             Console.WriteLine("Informe o id da série: ");
@@ -159,23 +183,136 @@ namespace APP_series
 
             Console.WriteLine();
 
-            repository.Delete(idSerie);
+            serieRepository.Delete(idSerie);
+        }
+
+        private static void FindAllFilme()
+        {
+            var filmesList = filmeRepository.FindAll();
+
+            if(filmesList.Count == 0)
+            {
+                Console.WriteLine("Nenhum filme encontrado.");
+                return;
+            }
+
+            foreach(var filmes in filmesList)
+            {
+                Console.WriteLine(filmes);
+            }
+
+            Console.WriteLine();
+
+        }
+
+        private static void FindByIdFilme()
+        {
+            Console.Write("Informe o id do filme: ");
+            int idFilme = int.Parse(Console.ReadLine());
+
+            var filme = filmeRepository.FindById(idFilme);
+
+            Console.WriteLine(filme);
+
+            Console.WriteLine();
+
+        }
+
+        private static void CreateFilme()
+        {
+            Console.WriteLine("Adicionar novo filme");
+
+            foreach (int generos in Enum.GetValues(typeof(GeneroOpcoes)))
+            {
+                Console.WriteLine($"{generos} - {Enum.GetName(typeof(GeneroOpcoes), generos)}");
+            }
+
+            Console.WriteLine();
+
+            Console.WriteLine("Escolha o gênero entre as opções acima: ");
+            int input_genero = int.Parse(Console.ReadLine());
+
+            Console.Write("Informe o título do filme: ");
+            string titulo = Console.ReadLine();
+
+            Console.Write("Informe a descrição do filme: ");
+            string descricao = Console.ReadLine();
+
+            Console.Write("Informe o ano da estréria do filme: ");
+            int ano = int.Parse(Console.ReadLine());
+
+            Console.Write("Informe o nome do diretor: ");
+            string diretor = Console.ReadLine();
+
+            Filme filme = new Filme(id: filmeRepository.Next(), titulo, genero: (GeneroOpcoes)input_genero, descricao, diretor, ano);
+
+            filmeRepository.Create(filme);
+
+            Console.WriteLine();
+        }
+
+        private static void UpdateFilme()
+        {
+            Console.WriteLine("Atualizar filme");
+            Console.Write("Infome o id do filme: ");
+            int filmeId = int.Parse(Console.ReadLine());
+
+            foreach (int generos in Enum.GetValues(typeof(GeneroOpcoes)))
+            {
+                Console.WriteLine($"{generos} - {Enum.GetName(typeof(GeneroOpcoes), generos)}");
+            }
+
+            Console.WriteLine();
+
+            Console.WriteLine("Escolha o gênero entre as opções acima: ");
+            int input_genero = int.Parse(Console.ReadLine());
+
+            Console.Write("Informe o título do filme: ");
+            string titulo = Console.ReadLine();
+
+            Console.Write("Informe a descrição do filme: ");
+            string descricao = Console.ReadLine();
+
+            Console.Write("Informe o ano da estréria do filme: ");
+            int ano = int.Parse(Console.ReadLine());
+
+            Console.Write("Informe o nome do diretor: ");
+            string diretor = Console.ReadLine();
+
+            Filme filme = new Filme(filmeId, titulo, genero: (GeneroOpcoes)input_genero, descricao, diretor, ano);
+
+            filmeRepository.Update(filmeId, filme);
+
+            Console.WriteLine();
+        }
+                
+        private static void DeleteFilme()
+        {
+            Console.WriteLine("Deletar filme ");
+            Console.Write("Informe o id do filme: ");
+            int filmeId = int.Parse(Console.ReadLine());
+
+            filmeRepository.Delete(filmeId);
         }
 
         private static string ObterOpcaoUsuario()
         {
-            
+
             Console.WriteLine("DIO Séries a seu dispor!!!");
             Console.WriteLine("Informe a opção desejada:");
             Console.WriteLine();
-
-            Console.WriteLine("1 - Listar series");
-            Console.WriteLine("2 - Vizualizar série");
-            Console.WriteLine("3 - Inserir nova série");
-            Console.WriteLine("4 - Atualizar série");
-            Console.WriteLine("5 - Apagar série");
-            Console.WriteLine("C - Limpar Tela");
-            Console.WriteLine("X - Sair");
+            Console.WriteLine("1 ->  Listar series");
+            Console.WriteLine("2 ->  Listar filmes");
+            Console.WriteLine("3 ->  Vizualizar série");
+            Console.WriteLine("4 ->  Vizualizar filme");
+            Console.WriteLine("5 ->  Inserir nova série");
+            Console.WriteLine("6 ->  Inserir novo filme");
+            Console.WriteLine("7 ->  Atualizar série");
+            Console.WriteLine("8 ->  Atualizar filme");
+            Console.WriteLine("9 ->  Apagar série");
+            Console.WriteLine("10 -> Apagar filme");
+            Console.WriteLine("C ->  Limpar Tela");
+            Console.WriteLine("X ->  Sair");
             Console.WriteLine();
 
             string opcaoUsuario = Console.ReadLine().ToUpper();
