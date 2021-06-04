@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace APP_series.Repository
 {
-    class SerieRepository : IRepository<Serie>
+    class SerieRepository : IGenericRepository<Serie>
     {
         private List<Serie> SeriesList = new List<Serie>();
 

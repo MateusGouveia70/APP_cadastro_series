@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace APP_series.Repository
 {
-    public interface IRepository<T> 
+    public interface IGenericRepository<T> 
     {
         List<T> FindAll();
         T FindById(int id);

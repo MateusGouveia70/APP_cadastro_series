@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace APP_series.Entities.Enum
 {
-    enum StatusSerie
+    enum Status
     {
         Disponivel = 0,
         Excluido = 1
